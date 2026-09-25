@@ -12,9 +12,13 @@
 #─────────────────────────────────────────────────────────────────────
 set -euo pipefail
 
-HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# Si se ejecuta remotamente vía ssh, no hay archivo local. Ignorar error.
-[[ -f "$HERE/hetzner-inventory.sh" ]] || true
+# Cuando se ejecuta como `curl ... | bash` o `bash -`, $0 es "-".
+# En ese caso usamos el directorio actual.
+if [[ "$0" == "-" ]]; then
+  HERE="$(pwd)"
+else
+  HERE="$(cd "$(dirname "$0")" 2>/dev/null && pwd || pwd)"
+fi
 
 # ── helpers ────────────────────────────────────────────────────────
 yaml_str() { printf '"%s"\n' "$(printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g')" ; }
