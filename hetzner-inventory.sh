@@ -30,11 +30,7 @@ yaml_str() {
   s="${s//\"/\\\"}"
   s="${s//$'\t'/\\t}"
   s="${s//$'\n'/\\n}"
-  if [[ -z "$s" || "$s" =~ [\":,\[\]{}|>&!%@#\`'\''] || "$s" =~ ^\ *$ || "$s" =~ [\ ] ]]; then
-    printf '"%s"\n' "$s"
-  else
-    printf '%s\n' "$s"
-  fi
+  printf '"%s"\n' "$s"
 }
 yaml_arr() {
   local k="$1"; shift
